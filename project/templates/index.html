@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Format Intake System</title>
+    <link href="/static/style.css" rel="stylesheet">
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+</head>
+<body>
+    <div id="app" x-data="intakeApp()">
+        <!-- Navigation -->
+        <nav class="navbar">
+            <div class="nav-content">
+                <div class="nav-left">
+                    <h1 class="nav-title">Multi-Format Intake System</h1>
+                </div>
+                <div class="nav-center">
+                    <a href="/" class="nav-link active">Home</a>
+                    <a href="/history" class="nav-link">History</a>
+                    <a href="/memory" class="nav-link">Memory</a>
+                </div>
+                <div class="nav-right">
+                    <div class="user-menu" x-data="{ open: false }">
+                        <button @click="open = !open" class="user-avatar">
+                            <svg class="user-icon" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                            </svg>
+                        </button>
+                        <div x-show="open" @click.away="open = false" class="user-dropdown">
+                            <button @click="editUser()" class="dropdown-item">Edit User</button>
+                            <button @click="logout()" class="dropdown-item">Logout</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="upload-container">
+                <h2 class="upload-title">Upload File for Processing</h2>
+                <p class="upload-subtitle">Support for PDF, JSON, and Email files</p>
+
+                <!-- File Upload Form -->
+                <form @submit.prevent="uploadFile()" class="upload-form">
+                    <div class="file-input-container">
+                        <input 
+                            type="file" 
+                            id="fileInput"
+                            x-ref="fileInput"
+                            @change="handleFileSelect($event)"
+                            accept=".pdf,.json,.txt,.eml"
+                            class="file-input"
+                            required
+                        >
+                        <label for="fileInput" class="file-label">
+                            <svg class="upload-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                            </svg>
+                            <span x-text="selectedFile ? selectedFile.name : 'Choose file to upload'"></span>
+                        </label>
+                    </div>
+
+                    <div class="file-type-selector">
+                        <label class="radio-label">
+                            <input type="radio" name="fileType" value="file" x-model="fileType" checked>
+                            <span>File (PDF)</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="fileType" value="email" x-model="fileType">
+                            <span>Email</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="fileType" value="json" x-model="fileType">
+                            <span>JSON</span>
+                        </label>
+                    </div>
+
+                    <button type="submit" :disabled="loading" class="extract-btn">
+                        <span x-show="!loading">Extract Data</span>
+                        <span x-show="loading" class="loading-spinner">Processing...</span>
+                    </button>
+                </form>
+
+                <!-- Error Messages -->
+                <div x-show="error" class="error-message" x-text="error"></div>
+            </div>
+        </main>
+
+        <!-- User Edit Modal -->
+        <div x-show="showUserModal" class="modal-overlay" @click.self="showUserModal = false">
+            <div class="modal-content">
+                <h3 class="modal-title">Edit User Profile</h3>
+                <form @submit.prevent="saveUser()" class="user-form">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" x-model="userProfile.username" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" x-model="userProfile.email" class="form-input">
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" @click="showUserModal = false" class="btn-secondary">Cancel</button>
+                        <button type="submit" class="btn-primary">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Success Popup -->
+        <div x-show="showSuccess" class="success-popup">
+            <div class="success-content">
+                <svg class="success-icon" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/>
+                </svg>
+                <span>Data successfully saved!</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>

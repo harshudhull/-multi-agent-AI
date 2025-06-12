@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory - Multi-Format Intake System</title>
+    <link href="/static/style.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-content">
+            <div class="nav-left">
+                <h1 class="nav-title">Multi-Format Intake System</h1>
+            </div>
+            <div class="nav-center">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/history" class="nav-link">History</a>
+                <a href="/memory" class="nav-link active">Memory</a>
+            </div>
+            <div class="nav-right">
+                <div class="user-menu">
+                    <button class="user-avatar">
+                        <svg class="user-icon" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="memory-container">
+            <h2>Memory Store</h2>
+            
+            <div class="memory-grid">
+                {% for item in memory %}
+                <div class="memory-card">
+                    <div class="memory-header">
+                        <h3>{{ item.key }}</h3>
+                        <span class="memory-date">{{ item.created_at }}</span>
+                    </div>
+                    <div class="memory-content">
+                        <pre>{{ item.data | tojson(indent=2) }}</pre>
+                    </div>
+                    {% if item.expires_at %}
+                    <div class="memory-footer">
+                        <span class="expires">Expires: {{ item.expires_at }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </main>
+</body>
+</html>

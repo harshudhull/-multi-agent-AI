@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>History - Multi-Format Intake System</title>
+    <link href="/static/style.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-content">
+            <div class="nav-left">
+                <h1 class="nav-title">Multi-Format Intake System</h1>
+            </div>
+            <div class="nav-center">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/history" class="nav-link active">History</a>
+                <a href="/memory" class="nav-link">Memory</a>
+            </div>
+            <div class="nav-right">
+                <div class="user-menu">
+                    <button class="user-avatar">
+                        <svg class="user-icon" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="history-container">
+            <h2>Extraction History</h2>
+            
+            <div class="history-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Filename</th>
+                            <th>Type</th>
+                            <th>Classification</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in history %}
+                        <tr>
+                            <td>{{ item.filename }}</td>
+                            <td>{{ item.file_type }}</td>
+                            <td>{{ item.classification or 'N/A' }}</td>
+                            <td>{{ item.created_at }}</td>
+                            <td>
+                                <button class="view-btn" onclick="viewDetails('{{ item.id }}')">View</button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function viewDetails(id) {
+            // Implement view details functionality
+            alert('View details for ID: ' + id);
+        }
+    </script>
+</body>
+</html>
